@@ -12,7 +12,7 @@ import (
 )
 
 func Run(token string, rootdir string) {
-	dg, err := discordgo.New("Bot " + os.Getenv("DISCORDFS_TOKEN"))
+	bot, err := discordgo.New("Bot " + os.Getenv("DISCORDFS_TOKEN"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -23,11 +23,11 @@ func Run(token string, rootdir string) {
 	}
 
 	initMessageCreate(rootdir)
-	dg.AddHandler(messageCreate)
+	bot.AddHandler(messageCreate)
 
-	dg.Identify.Intents = discordgo.IntentsGuildMessages
+	bot.Identify.Intents = discordgo.IntentsGuildMessages
 
-	err = dg.Open()
+	err = bot.Open()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -37,5 +37,5 @@ func Run(token string, rootdir string) {
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
 	<-sc
 
-	dg.Close()
+	bot.Close()
 }
